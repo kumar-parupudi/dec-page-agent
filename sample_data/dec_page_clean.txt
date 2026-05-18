@@ -1,0 +1,106 @@
+================================================================================
+                        INSURANCE INTELLIGENCE
+                   HOMEOWNERS POLICY DECLARATIONS
+================================================================================
+
+NAMED INSURED:   Marcus T. Holloway & Diane L. Holloway
+                 2847 Creekside Drive
+                 Marietta, GA  30062
+
+Policy Number:         HO-GA-4419-287654
+Policy Period Inception:  03/01/2025
+Expiration:               03/01/2026
+
+--------------------------------------------------------------------------------
+FIRST MORTGAGEE:
+
+  Cornerstone Federal Savings Bank
+  Loan #: 88-301-47792
+  P.O. Box 14200
+  Atlanta, GA  30301
+
+--------------------------------------------------------------------------------
+INSURANCE COMPANY:
+
+  Heartland Mutual Insurance Company
+  800 Peachtree Commerce Blvd., Suite 400
+  Atlanta, GA  30308
+  Phone: (404) 555-0182
+
+AGENT:
+
+  Robert J. Callahan, Licensed Agent
+  Callahan Insurance Group
+  1150 Johnson Ferry Rd., Suite 220
+  Marietta, GA  30068
+  Phone: (770) 555-0341
+
+--------------------------------------------------------------------------------
+PROPERTY ADDRESS:    5512 Amber Oak Court
+                     Kennesaw, GA  30144
+
+Policy Type:         HO-3 Standard Special Form
+
+--------------------------------------------------------------------------------
+SECTION I - PROPERTY COVERAGES
+
+  Coverage (A)  Dwelling                            $   480,000
+  Coverage (B)  Other Structures (10% of A)         $    48,000
+  Coverage (C)  Personal Property (50% of A)        $   240,000
+  Coverage (D)  Loss of Use (20% of A)              $    96,000
+
+SECTION II - LIABILITY COVERAGES
+
+  Coverage (E)  Personal Liability          $300,000  Each Occurrence
+  Coverage (F)  Medical Payments to Others    $1,000  Each Person
+
+--------------------------------------------------------------------------------
+DEDUCTIBLES
+
+  All Perils:      $1,000
+  Wind/Hail:       $1,000
+
+--------------------------------------------------------------------------------
+PROPERTY INFORMATION
+
+  Construction Type:         Brick Veneer
+  Year Built:                2008
+  Square Footage:            2,640 sq. ft.
+  Fire Protection Class:     4
+  Distance to Hydrant:       Not more than 100 feet
+  Distance to Fire Dept.:    Not more than 5 miles
+
+--------------------------------------------------------------------------------
+DISCOUNTS APPLIED
+
+  - Loyalty Customer
+  - Bundle Package (Auto + Home)
+  - Security System (Monitored Alarm)
+
+--------------------------------------------------------------------------------
+FORMS AND ENDORSEMENTS
+
+  HO-3 (10-15)             Standard Special Form
+  HO-04-90                 Water Backup and Sump Overflow — EXCLUDED
+  HO-09-11                 Inflation Guard (4% Annual)
+  HO-60-GA                 Georgia Amendatory Endorsement
+
+--------------------------------------------------------------------------------
+PREMIUM SUMMARY
+
+  Base Premium:                              $  1,318.00
+  Bundle Discount:                           -$    95.00
+  Security System Credit:                    -$    42.00
+  Loyalty Credit:                            -$    28.00
+                                            -----------
+  TOTAL ANNUAL PREMIUM:                      $  1,153.00
+
+  Premium Due Date:  03/01/2025
+
+================================================================================
+This Declarations Page, together with the Policy Form, Endorsements, and
+any attached Schedules, constitutes the entire contract of insurance.
+
+Heartland Mutual Insurance Company — Atlanta, GA
+Policy issued by a licensed Georgia domestic insurer.
+================================================================================

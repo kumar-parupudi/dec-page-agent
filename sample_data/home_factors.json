@@ -1,0 +1,53 @@
+{
+  "properties": [
+    {
+      "property_address": "5512 Amber Oak Court, Kennesaw, GA 30144",
+      "roof_material": "asphalt_shingle",
+      "roof_age_years": 18,
+      "roof_replacement_recommended": true,
+      "electrical_panel_type": "modern_breaker",
+      "electrical_panel_age_years": 8,
+      "amp_service": 200,
+      "plumbing_material": "copper",
+      "plumbing_age_years": 14,
+      "water_intrusion_history": true,
+      "water_intrusion_count_5yr": 1,
+      "square_footage": 2850,
+      "finished_basement": true,
+      "estimated_replacement_cost": 555000,
+      "fire_protection_class": 4,
+      "distance_to_fire_dept_miles": 2.1,
+      "distance_to_hydrant_feet": 85,
+      "notable_risk_factors": [
+        "Roof past expected useful life",
+        "Finished basement with water intrusion history",
+        "Replacement cost gap of $75K against Coverage A"
+      ]
+    },
+    {
+      "property_address": "9041 Stonegate Mill Road, Alpharetta, GA 30009",
+      "roof_material": "tile",
+      "roof_age_years": 5,
+      "roof_replacement_recommended": false,
+      "electrical_panel_type": "federal_pacific",
+      "electrical_panel_age_years": 32,
+      "amp_service": 100,
+      "plumbing_material": "polybutylene",
+      "plumbing_age_years": 28,
+      "water_intrusion_history": false,
+      "water_intrusion_count_5yr": 0,
+      "square_footage": 1950,
+      "finished_basement": false,
+      "estimated_replacement_cost": 380000,
+      "fire_protection_class": 6,
+      "distance_to_fire_dept_miles": 4.8,
+      "distance_to_hydrant_feet": 380,
+      "notable_risk_factors": [
+        "Federal Pacific electrical panel (known fire risk)",
+        "Polybutylene plumbing (known failure risk)",
+        "100-amp service may be insufficient for modern loads",
+        "Beyond preferred 5-mile fire dept distance"
+      ]
+    }
+  ]
+}
