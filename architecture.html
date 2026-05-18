@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Architecture · Dec Page Intelligence Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+<style>
+  :root {
+    --bg: #F7F3EA;
+    --bg-paper: #FBF8F2;
+    --ink: #131722;
+    --ink-soft: #3C434F;
+    --ink-muted: #6B7280;
+    --rule: #D6CFC0;
+    --rule-soft: #EAE3D2;
+    --accent-amber: #B5651D;
+    --accent-amber-soft: #E8B47A;
+    --accent-teal: #2D5F66;
+    --accent-teal-soft: #6FA0A6;
+    --accent-rust: #8B3A2B;
+    --shadow: 0 1px 3px rgba(19, 23, 34, 0.04), 0 8px 24px rgba(19, 23, 34, 0.04);
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  
+  body {
+    font-family: 'Manrope', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 15.5px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    background-image: 
+      radial-gradient(circle at 12% 8%, rgba(181, 101, 29, 0.04) 0%, transparent 28%),
+      radial-gradient(circle at 88% 92%, rgba(45, 95, 102, 0.05) 0%, transparent 32%);
+    min-height: 100vh;
+  }
+  
+  .meta-strip {
+    border-bottom: 1px solid var(--rule);
+    padding: 14px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .meta-strip .container {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
+  .meta-strip strong { color: var(--ink); font-weight: 600; }
+  
+  .container {
+    max-width: 1180px; margin: 0 auto; padding: 0 32px;
+  }
+  
+  header.hero {
+    padding: 80px 0 60px 0;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+  
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent-amber);
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block; width: 32px; height: 1px; background: var(--accent-amber);
+  }
+  
+  h1.hero-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    color: var(--ink);
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+  }
+  h1.hero-title em {
+    font-style: italic;
+    color: var(--accent-rust);
+    font-variation-settings: "opsz" 144, "SOFT" 100;
+  }
+  
+  .hero-lede {
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 760px;
+    font-weight: 300;
+  }
+  
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0;
+    margin-top: 48px;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .hero-stat {
+    padding: 20px 0;
+    border-right: 1px solid var(--rule);
+  }
+  .hero-stat:last-child { border-right: none; }
+  .hero-stat-value {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 6px;
+    font-variation-settings: "opsz" 144;
+  }
+  .hero-stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+  }
+  
+  section {
+    padding: 72px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  section:last-of-type { border-bottom: none; }
+  
+  .section-header {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 32px;
+    margin-bottom: 40px;
+    align-items: start;
+  }
+  
+  .section-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--accent-amber);
+    padding-top: 14px;
+    border-top: 2px solid var(--accent-amber);
+  }
+  
+  .section-title-block h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-bottom: 16px;
+    font-variation-settings: "opsz" 144;
+  }
+  .section-title-block .section-lede {
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 720px;
+    font-weight: 300;
+  }
+  
+  .diagram-canvas {
+    background: var(--bg-paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 40px 24px;
+    margin: 0;
+    overflow-x: auto;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+  .diagram-canvas::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-amber) 0%, var(--accent-teal) 100%);
+  }
+  
+  .diagram-canvas .mermaid {
+    background: transparent;
+    text-align: center;
+  }
+  
+  .diagram-caption {
+    margin-top: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .diagram-caption::before {
+    content: ''; width: 24px; height: 1px; background: var(--ink-muted);
+  }
+  
+  /* Stage detail grid */
+  .stages-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-top: 24px;
+  }
+  .stage-row {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 32px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    align-items: start;
+  }
+  .stage-row:last-child { border-bottom: none; }
+  
+  .stage-num {
+    font-family: 'Fraunces', serif;
+    font-size: 44px;
+    line-height: 1;
+    color: var(--accent-amber);
+    font-variation-settings: "opsz" 144;
+    font-style: italic;
+  }
+  
+  .stage-name {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    font-variation-settings: "opsz" 144;
+  }
+  .stage-purpose {
+    font-size: 15.5px;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+    line-height: 1.55;
+  }
+  .stage-io {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+  }
+  .stage-io-block {
+    background: var(--bg);
+    padding: 14px 16px;
+    border-left: 2px solid var(--accent-teal);
+    border-radius: 0 3px 3px 0;
+  }
+  .stage-io-label {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-muted);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .stage-io-value {
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  
+  /* Sample data */
+  .sample-card {
+    background: var(--bg-paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 28px;
+    margin-top: 24px;
+    box-shadow: var(--shadow);
+  }
+  .sample-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-amber);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 14px;
+    font-size: 14.5px;
+  }
+  .comparison-table th {
+    text-align: left;
+    padding: 12px 16px 12px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+    font-weight: 600;
+    border-bottom: 1.5px solid var(--rule);
+  }
+  .comparison-table td {
+    padding: 12px 16px 12px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    vertical-align: top;
+  }
+  .comparison-table td:first-child {
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .comparison-table .signal-up {
+    color: var(--accent-rust);
+    font-weight: 600;
+  }
+  .comparison-table .signal-down {
+    color: var(--accent-teal);
+    font-weight: 600;
+  }
+  .comparison-table .signal-flat {
+    color: var(--ink-muted);
+  }
+  
+  .callout {
+    background: linear-gradient(180deg, rgba(181, 101, 29, 0.06) 0%, rgba(181, 101, 29, 0.02) 100%);
+    border-left: 3px solid var(--accent-amber);
+    padding: 24px 28px;
+    margin: 32px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .callout-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-amber);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .callout-text {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .callout-text em {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+  }
+  .callout-text strong { font-weight: 600; }
+  
+  /* Decisions */
+  .decisions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-top: 24px;
+  }
+  .decision {
+    display: grid;
+    grid-template-columns: 60px 1fr 1.4fr;
+    gap: 24px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    align-items: start;
+  }
+  .decision:last-child { border-bottom: none; }
+  .decision-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent-amber);
+    font-weight: 600;
+    padding-top: 4px;
+  }
+  .decision-question {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    line-height: 1.35;
+    color: var(--ink);
+    font-style: italic;
+    font-variation-settings: "opsz" 144;
+  }
+  .decision-rationale {
+    font-size: 15px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .decision-rationale strong { color: var(--ink); font-weight: 600; }
+  
+  /* Two-column */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    margin-top: 32px;
+  }
+  .two-col h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 22px;
+    margin-bottom: 14px;
+    color: var(--ink);
+    font-variation-settings: "opsz" 144;
+  }
+  .two-col p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+  .two-col p + p { margin-top: 12px; }
+  
+  /* Demo narrative box */
+  .demo-box {
+    background: var(--ink);
+    color: #FBF8F2;
+    padding: 36px 40px;
+    border-radius: 4px;
+    margin-top: 24px;
+    box-shadow: var(--shadow);
+  }
+  .demo-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent-amber-soft);
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+  .demo-narrative {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    line-height: 1.55;
+    color: #FBF8F2;
+    font-variation-settings: "opsz" 144;
+    font-weight: 300;
+  }
+  .demo-narrative em {
+    font-style: italic;
+    color: var(--accent-amber-soft);
+  }
+  
+  footer {
+    padding: 60px 0 80px 0;
+    text-align: center;
+    border-top: 1px solid var(--rule);
+  }
+  footer .footer-mark {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+  }
+  footer .footer-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  
+  @media (max-width: 768px) {
+    .section-header { grid-template-columns: 1fr; gap: 12px; }
+    .decision { grid-template-columns: 1fr; gap: 8px; }
+    .two-col { grid-template-columns: 1fr; gap: 24px; }
+    .stage-row { grid-template-columns: 1fr; gap: 12px; }
+    .stage-io { grid-template-columns: 1fr; gap: 12px; }
+    .container { padding: 0 20px; }
+    section { padding: 48px 0; }
+    header.hero { padding: 56px 0 40px 0; }
+    h1.hero-title { font-size: 2rem; }
+    .diagram-canvas { padding: 24px 12px; }
+    .demo-box { padding: 24px; }
+    .demo-narrative { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="meta-strip">
+  <div class="container">
+    <span><strong>Project ·</strong> Dec Page Intelligence Agent</span>
+    <span><strong>Doc ·</strong> Architecture Reference</span>
+    <span><strong>Type ·</strong> Working prototype</span>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Homeowners · Switch Decision · Agentic AI Prototype</div>
+    <h1 class="hero-title">Dec Page Intelligence Agent <em>architecture</em></h1>
+    <p class="hero-lede">A five-stage agentic pipeline that turns a customer's current homeowners Dec Page into a Proposed Quote with side-by-side comparison and agent talking points. Built deliberately at the workflow-with-LLM-nodes altitude, enriched with synthetic property intelligence as a strategic nod toward data-advantaged underwriting.</p>
+    
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value">5</div>
+        <div class="hero-stat-label">Pipeline Stages</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">4</div>
+        <div class="hero-stat-label">LLM Invocations</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">~14h</div>
+        <div class="hero-stat-label">Build Budget</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">HO-3</div>
+        <div class="hero-stat-label">Policy Type Focus</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">01 / USE CASE</div>
+      <div class="section-title-block">
+        <h2>The business story</h2>
+        <p class="section-lede">A customer shopping homeowners coverage hands over their current Dec Page. The system extracts everything, layers in property intelligence, generates a competing Proposed Quote, and produces a side-by-side comparison the agent can walk through in two minutes.</p>
+      </div>
+    </div>
+    
+    <div class="two-col">
+      <div>
+        <h3>Why this use case</h3>
+        <p>The homeowners insurance market in 2026 is shaped by aggressive customer acquisition and agency growth across the industry. Every new quote is essentially a switch-decision transaction: a customer with existing coverage somewhere, being asked to move.</p>
+        <p>The work an agent does manually today, retyping policy data, eyeballing coverages, sketching a quote, takes 20 to 40 minutes per opportunity. Compressing it to under two minutes with a structured side-by-side is real revenue lift.</p>
+      </div>
+      <div>
+        <h3>Why it's agentic, not just OCR</h3>
+        <p>Extraction is only one stage. The system also reasons about <strong>coverage adequacy</strong> (is the customer underinsured against estimated replacement cost?), <strong>gap analysis</strong> (no umbrella, no scheduled property, no water backup), and <strong>property risk</strong> (synthetic property intelligence signals).</p>
+        <p>It generates a Proposed Quote rather than just extracting one. That generation step is where the agentic reasoning sits, and where the strategic value of property intelligence becomes visible.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">02 / SYSTEM</div>
+      <div class="section-title-block">
+        <h2>System architecture</h2>
+        <p class="section-lede">The full picture. A Dec Page comes in, gets classified and extracted. Property intelligence joins the extracted data to inform risk and quote generation. A side-by-side comparison flows out, with audit logging and human-in-the-loop checkpoints active throughout.</p>
+      </div>
+    </div>
+    
+    <div class="diagram-canvas">
+      <pre class="mermaid">
+graph TB
+    DOC["Customer's Current<br/>Dec Page (PDF/Text)"]:::input
+    HFD["Synthetic Property<br/>Intelligence Data"]:::input
+    
+    MAIN["main.py<br/>Pipeline Orchestrator"]:::orch
+    
+    S1["Stage 1 · Classifier<br/>HO-3 / HO-5 / HO-6 / HO-8"]:::stage
+    S2["Stage 2 · Dec Page Extractor<br/>Coverages, property, premium"]:::stage
+    S3["Stage 3 · Risk Analyzer<br/>Coverage gaps + property risk"]:::stage
+    S4["Stage 4 · Quote Generator<br/>Proposed coverage + premium"]:::stage
+    S5["Stage 5 · Comparator/Packager<br/>Side-by-side + narrative"]:::stage
+    
+    CLAUDE["Anthropic Claude API<br/>claude-sonnet-4"]:::llm
+    
+    SCHEMA["Pydantic Schemas<br/>Structured outputs"]:::cross
+    AUDIT["Audit Logger<br/>JSON per-stage events"]:::cross
+    HITL["Human-in-the-Loop<br/>Confidence-driven flags"]:::cross
+    
+    PACKET["Comparison Packet<br/>+ Agent Talking Points"]:::output
+    UI["Streamlit UI<br/>Stage-by-stage view"]:::output
+    
+    DOC --> MAIN
+    HFD -.->|enriches| S3
+    MAIN --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+    S4 --> S5
+    S5 --> PACKET
+    PACKET --> UI
+    
+    S1 -.->|LLM call| CLAUDE
+    S2 -.->|LLM call| CLAUDE
+    S3 -.->|LLM call| CLAUDE
+    S5 -.->|LLM call| CLAUDE
+    
+    S1 -.->|validates| SCHEMA
+    S2 -.->|validates| SCHEMA
+    S3 -.->|validates| SCHEMA
+    S4 -.->|validates| SCHEMA
+    S5 -.->|validates| SCHEMA
+    
+    S1 -.->|logs| AUDIT
+    S2 -.->|logs| AUDIT
+    S3 -.->|logs| AUDIT
+    S4 -.->|logs| AUDIT
+    S5 -.->|logs| AUDIT
+    
+    S3 -.->|triggers| HITL
+    
+    classDef input fill:#FBF8F2,stroke:#8B3A2B,stroke-width:1.5px,color:#131722
+    classDef orch fill:#FBF8F2,stroke:#2D5F66,stroke-width:1.5px,color:#131722
+    classDef stage fill:#F7F3EA,stroke:#B5651D,stroke-width:1.5px,color:#131722
+    classDef llm fill:#FBF8F2,stroke:#2D5F66,stroke-width:1.5px,color:#131722
+    classDef cross fill:#F7F3EA,stroke:#6B7280,stroke-width:1px,color:#131722,stroke-dasharray:4 4
+    classDef output fill:#FBF8F2,stroke:#8B3A2B,stroke-width:1.5px,color:#131722
+      </pre>
+    </div>
+    <div class="diagram-caption">Figure 01 · Five-stage pipeline with property intelligence enrichment</div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">03 / STAGES</div>
+      <div class="section-title-block">
+        <h2>What each stage does</h2>
+        <p class="section-lede">Stage-by-stage detail. Each row shows the purpose, input, and output. This is the design contract for the build.</p>
+      </div>
+    </div>
+    
+    <div class="stages-grid">
+      <div class="stage-row">
+        <div class="stage-num">01</div>
+        <div>
+          <div class="stage-name">Classifier</div>
+          <div class="stage-purpose">Confirms the document is a homeowners Dec Page and identifies the specific policy form. HO-3 is the most common; HO-5 is premium coverage; HO-6 is condo; HO-8 is older-home actual cash value. The form determines what fields to expect downstream.</div>
+          <div class="stage-io">
+            <div class="stage-io-block">
+              <div class="stage-io-label">Input</div>
+              <div class="stage-io-value">Raw document text</div>
+            </div>
+            <div class="stage-io-block">
+              <div class="stage-io-label">Output</div>
+              <div class="stage-io-value">ClassificationResult { policy_form, carrier, confidence, reasoning }</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stage-row">
+        <div class="stage-num">02</div>
+        <div>
+          <div class="stage-name">Dec Page Extractor</div>
+          <div class="stage-purpose">Pulls all structured data from the dec page into a normalized schema. Coverages A through F, deductibles (including separate wind/hail where applicable), property attributes, discounts, premium, mortgagee, and forms/endorsements. Per-field confidence scoring on every extraction.</div>
+          <div class="stage-io">
+            <div class="stage-io-block">
+              <div class="stage-io-label">Input</div>
+              <div class="stage-io-value">Text + Classification</div>
+            </div>
+            <div class="stage-io-block">
+              <div class="stage-io-label">Output</div>
+              <div class="stage-io-value">ExtractedDecPage { policyholder, property, coverages, deductibles, discounts, premium, mortgagee, attributes }</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stage-row">
+        <div class="stage-num">03</div>
+        <div>
+          <div class="stage-name">Risk Analyzer</div>
+          <div class="stage-purpose">The agentic reasoning stage. Combines the extracted Dec Page with synthetic property intelligence data. Identifies underinsurance signals (Coverage A vs estimated replacement cost), coverage gaps (no umbrella, no scheduled personal property, no water backup, no service line), and property risk factors (roof age, electrical panel, water intrusion history).</div>
+          <div class="stage-io">
+            <div class="stage-io-block">
+              <div class="stage-io-label">Input</div>
+              <div class="stage-io-value">ExtractedDecPage + HomeFactorsData</div>
+            </div>
+            <div class="stage-io-block">
+              <div class="stage-io-label">Output</div>
+              <div class="stage-io-value">RiskProfile { underinsurance_flags, coverage_gaps, risk_factors, recommendations }</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stage-row">
+        <div class="stage-num">04</div>
+        <div>
+          <div class="stage-name">Quote Generator</div>
+          <div class="stage-purpose">Generates a Proposed Quote based on the customer's current coverage plus the Risk Analyzer's recommendations. Adjusts limits to close gaps. Adds suggested endorsements. Produces a directional premium estimate using simple multipliers (not real rate tables). Justifies each adjustment in plain language.</div>
+          <div class="stage-io">
+            <div class="stage-io-block">
+              <div class="stage-io-label">Input</div>
+              <div class="stage-io-value">ExtractedDecPage + RiskProfile</div>
+            </div>
+            <div class="stage-io-block">
+              <div class="stage-io-label">Output</div>
+              <div class="stage-io-value">ProposedQuote { coverages, endorsements, deductibles, estimated_premium, change_rationale }</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stage-row">
+        <div class="stage-num">05</div>
+        <div>
+          <div class="stage-name">Comparator / Packager</div>
+          <div class="stage-purpose">Produces the side-by-side comparison of Current Dec Page versus Proposed Quote. Tags each line as Improved, Reduced, Unchanged, Gap-Closed, or New-Coverage. Generates an agent-ready narrative summary plus a customer-facing explanation. This is the artifact the human actually uses.</div>
+          <div class="stage-io">
+            <div class="stage-io-block">
+              <div class="stage-io-label">Input</div>
+              <div class="stage-io-value">ExtractedDecPage + ProposedQuote</div>
+            </div>
+            <div class="stage-io-block">
+              <div class="stage-io-label">Output</div>
+              <div class="stage-io-value">ComparisonPacket { side_by_side, change_signals, agent_talking_points, customer_summary }</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">04 / EXAMPLE</div>
+      <div class="section-title-block">
+        <h2>What the output looks like</h2>
+        <p class="section-lede">A representative slice of the side-by-side comparison, using values modeled after your sample Dec Page. Coverage A bumped to match estimated replacement cost. Umbrella added. Water backup endorsement added. Premium adjusts accordingly.</p>
+      </div>
+    </div>
+    
+    <div class="sample-card">
+      <div class="sample-label">Sample Comparison · 1427 Sample Drive · HO-3</div>
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th style="width:28%">Coverage Element</th>
+            <th style="width:24%">Current Dec Page</th>
+            <th style="width:24%">Proposed Quote</th>
+            <th>Signal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Coverage A · Dwelling</td>
+            <td>$450,000</td>
+            <td>$525,000</td>
+            <td class="signal-up">▲ Increased · Replacement cost gap</td>
+          </tr>
+          <tr>
+            <td>Coverage B · Other Structures</td>
+            <td>$45,000</td>
+            <td>$52,500</td>
+            <td class="signal-up">▲ Increased · Maintains 10% ratio</td>
+          </tr>
+          <tr>
+            <td>Coverage C · Personal Property</td>
+            <td>$225,000</td>
+            <td>$262,500</td>
+            <td class="signal-up">▲ Increased · Maintains 50% ratio</td>
+          </tr>
+          <tr>
+            <td>Coverage D · Loss of Use</td>
+            <td>$90,000</td>
+            <td>$105,000</td>
+            <td class="signal-up">▲ Increased · Maintains 20% ratio</td>
+          </tr>
+          <tr>
+            <td>Coverage E · Liability</td>
+            <td>$300,000</td>
+            <td>$500,000</td>
+            <td class="signal-up">▲ Increased · Aligns with umbrella</td>
+          </tr>
+          <tr>
+            <td>Personal Umbrella</td>
+            <td>Not included</td>
+            <td>$1,000,000</td>
+            <td class="signal-up">▲ Added · Gap closed</td>
+          </tr>
+          <tr>
+            <td>Water Backup Endorsement</td>
+            <td>Not included</td>
+            <td>$10,000</td>
+            <td class="signal-up">▲ Added · Property risk factor</td>
+          </tr>
+          <tr>
+            <td>All-Perils Deductible</td>
+            <td>$1,000</td>
+            <td>$1,000</td>
+            <td class="signal-flat">— Unchanged</td>
+          </tr>
+          <tr>
+            <td>Estimated Annual Premium</td>
+            <td>$1,200</td>
+            <td>$1,485</td>
+            <td class="signal-up">▲ +$285 · Materially broader coverage</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="callout">
+      <div class="callout-label">Agent talking point generated by Stage 5</div>
+      <div class="callout-text"><em>"Your current policy is leaving real exposure on the table. The dwelling is under-covered by about $75K relative to estimated replacement cost. There's no umbrella protecting your assets above $300K. And given the construction type and finished basement, water backup is a real risk that's not covered today. The proposed quote closes those gaps for about $24 a month more."</em></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">05 / FLOW</div>
+      <div class="section-title-block">
+        <h2>Runtime sequence</h2>
+        <p class="section-lede">The step-by-step picture of what happens when a customer's Dec Page comes in. Note the property intelligence join at Stage 3, where supplemental data enriches the reasoning.</p>
+      </div>
+    </div>
+    
+    <div class="diagram-canvas">
+      <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    participant U as Agent/Customer
+    participant UI as Streamlit UI
+    participant O as Orchestrator
+    participant C1 as Classifier
+    participant C2 as Extractor
+    participant C3 as Risk Analyzer
+    participant C4 as Quote Generator
+    participant C5 as Comparator
+    participant HF as Property Intelligence Data
+    participant API as Claude API
+    participant L as Audit Log
+    
+    U->>UI: Upload Dec Page
+    UI->>O: process(text)
+    
+    O->>C1: classify(text)
+    C1->>API: classification prompt
+    API-->>C1: ClassificationResult
+    C1->>L: log Stage 1
+    C1-->>O: HO-3, conf=0.94
+    
+    O->>C2: extract(text, type)
+    C2->>API: extraction prompt + schema
+    API-->>C2: ExtractedDecPage
+    C2->>L: log Stage 2
+    C2-->>O: full structured policy
+    
+    O->>HF: lookup(property_address)
+    HF-->>O: HomeFactorsData
+    
+    O->>C3: analyze(extracted, home_factors)
+    C3->>API: risk analysis prompt
+    API-->>C3: RiskProfile
+    C3->>L: log Stage 3
+    C3-->>O: 3 gaps, 2 risk factors
+    
+    O->>C4: generate_quote(extracted, risk_profile)
+    Note over C4: Logic + multipliers<br/>(no LLM call for quote)
+    C4->>L: log Stage 4
+    C4-->>O: ProposedQuote
+    
+    O->>C5: compare(extracted, proposed)
+    C5->>API: comparison narrative prompt
+    API-->>C5: ComparisonPacket
+    C5->>L: log Stage 5
+    C5-->>O: side-by-side + narrative
+    
+    O-->>UI: All stage results
+    UI-->>U: Display comparison + talking points
+      </pre>
+    </div>
+    <div class="diagram-caption">Figure 02 · Runtime sequence, four LLM calls plus deterministic quote generation</div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">06 / GOVERNANCE</div>
+      <div class="section-title-block">
+        <h2>Governance overlay</h2>
+        <p class="section-lede">Four gates determine whether the Proposed Quote flows through automatically or surfaces for agent review. All four must pass for autonomous routing. Any single failure routes to human review with the specific flag visible.</p>
+      </div>
+    </div>
+    
+    <div class="diagram-canvas">
+      <pre class="mermaid">
+graph LR
+    START(["Dec Page<br/>Processed"]):::start
+    
+    D1{"Classification<br/>confidence<br/>≥ 0.70?"}:::decision
+    D2{"All extracted<br/>field confidence<br/>≥ 0.70?"}:::decision
+    D3{"Property attrs<br/>internally<br/>consistent?"}:::decision
+    D4{"Quote within<br/>guideline<br/>bounds?"}:::decision
+    
+    AUTO["Auto-display<br/>Comparison to Agent"]:::auto
+    REV["Flag for<br/>Agent Review"]:::review
+    
+    START --> D1
+    D1 -->|Yes| D2
+    D2 -->|Yes| D3
+    D3 -->|Yes| D4
+    D4 -->|Yes| AUTO
+    
+    D1 -->|No| REV
+    D2 -->|No| REV
+    D3 -->|No| REV
+    D4 -->|No| REV
+    
+    classDef start fill:#FBF8F2,stroke:#2D5F66,stroke-width:1.5px,color:#131722
+    classDef decision fill:#F7F3EA,stroke:#B5651D,stroke-width:1.5px,color:#131722
+    classDef auto fill:#FBF8F2,stroke:#2D5F66,stroke-width:2px,color:#131722
+    classDef review fill:#FBF8F2,stroke:#8B3A2B,stroke-width:2px,color:#131722
+      </pre>
+    </div>
+    <div class="diagram-caption">Figure 03 · Governance routing, all gates must pass for autonomous display</div>
+    
+    <div class="callout">
+      <div class="callout-label">Design principle</div>
+      <div class="callout-text">Even in customer acquisition workflows, the right default is <em>agent review</em>, not <em>autonomous customer-facing output</em>. The system prepares; the licensed agent decides what to present and how. That posture matters in regulated insurance, and it's what separates production-grade AI from demo-grade AI.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">07 / DECISIONS</div>
+      <div class="section-title-block">
+        <h2>Key design decisions</h2>
+        <p class="section-lede">The non-obvious choices baked into this architecture, and why each is defensible. Each is a talking point for the interview.</p>
+      </div>
+    </div>
+    
+    <div class="decisions">
+      <div class="decision">
+        <div class="decision-id">D-01</div>
+        <div class="decision-question">Why a workflow, not a fully autonomous agent loop?</div>
+        <div class="decision-rationale"><strong>Anthropic's published guidance</strong> for production agentic systems is to use model intelligence inside known workflow steps rather than full autonomy. For regulated insurance with downstream customer-facing consequences, autonomy at Rung 5 or 6 is the wrong default. Agents earn autonomy per use case.</div>
+      </div>
+      
+      <div class="decision">
+        <div class="decision-id">D-02</div>
+        <div class="decision-question">Why is Stage 4 (Quote Generator) deterministic, not LLM?</div>
+        <div class="decision-rationale"><strong>Pricing is rules-based work, not language work.</strong> Coverage limit recommendations and premium multipliers are policy decisions encoded in code. Using an LLM for them adds non-determinism without adding value. The LLM is the right tool for extraction, analysis, and narrative; deterministic logic is the right tool for quotes.</div>
+      </div>
+      
+      <div class="decision">
+        <div class="decision-id">D-03</div>
+        <div class="decision-question">Why separate Risk Analyzer from Quote Generator?</div>
+        <div class="decision-rationale">The Risk Analyzer's job is <strong>identifying what's missing or under-covered</strong>. The Quote Generator's job is <strong>translating those signals into priced coverage adjustments</strong>. Keeping them separate means risk analysis is reusable across other workflows, and the quote logic is auditable independent of the analysis.</div>
+      </div>
+      
+      <div class="decision">
+        <div class="decision-id">D-04</div>
+        <div class="decision-question">Why per-field confidence rather than per-document?</div>
+        <div class="decision-rationale">Real dec pages have heterogeneous reliability. The policy number is usually crisp; deductible structures can be ambiguous; discount lists are often abbreviated. <strong>Per-field confidence drives granular human review</strong>, so the agent can quickly see which specific fields need verification rather than re-reading the whole document.</div>
+      </div>
+      
+      <div class="decision">
+        <div class="decision-id">D-05</div>
+        <div class="decision-question">Why include synthetic property intelligence data?</div>
+        <div class="decision-rationale">It demonstrates the <strong>strategic data advantage</strong> that supplemental property data creates. Most extraction systems work only from the dec page itself. Layering in third-party property intelligence lets the system reason about <em>actual</em> property risk, which is the genuine moat in modern homeowners underwriting. Including it in the prototype makes the architectural pattern tangible.</div>
+      </div>
+      
+      <div class="decision">
+        <div class="decision-id">D-06</div>
+        <div class="decision-question">Why generate a Quote rather than just flagging gaps?</div>
+        <div class="decision-rationale">A flag tells the agent <em>there is a problem</em>. A Quote tells the agent <em>and here is the answer</em>. The difference in agent productivity between those two outputs is substantial. The system is more valuable when it does the next step's work, not just the diagnostic.</div>
+      </div>
+      
+      <div class="decision">
+        <div class="decision-id">D-07</div>
+        <div class="decision-question">Why generate agent talking points as well as data?</div>
+        <div class="decision-rationale">The data is for the system; the talking points are for the human. New agents especially need <strong>narrative scaffolding</strong> to walk customers through a comparison confidently. Generating that scaffolding closes the gap between system output and customer conversation.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">08 / EXTENSIONS</div>
+      <div class="section-title-block">
+        <h2>Production considerations and extensions</h2>
+        <p class="section-lede">What this prototype demonstrates, what it deliberately omits, and where production-grade extensions would invest first.</p>
+      </div>
+    </div>
+    
+    <div class="two-col">
+      <div>
+        <h3>What this prototype proves</h3>
+        <p>That a regulated-industry agentic AI workflow can be architected with the right altitude of LLM autonomy, with structured outputs between stages, deterministic logic where rules apply, and human-in-the-loop on ambiguity. The architectural pattern is the contribution.</p>
+        <p>The five-stage chain demonstrates that LLM intelligence and deterministic logic can coexist productively in the same pipeline. Stage 4's deliberate exclusion of the LLM is as architecturally meaningful as Stage 3's inclusion of property intelligence reasoning.</p>
+      </div>
+      <div>
+        <h3>What production-grade extensions would require</h3>
+        <p>A real eval harness with golden datasets and continuous evaluation. Real rate tables and actuarial logic in place of directional multipliers. A live property intelligence data feed in place of the synthetic JSON. Enterprise observability infrastructure for traces, costs, and quality drift. Integration with policy administration, agent management, and CRM systems.</p>
+        <p>Each is real engineering work that wasn't in scope for a four-day prototype but maps cleanly onto the existing architecture without structural changes.</p>
+      </div>
+    </div>
+    
+    <div class="callout">
+      <div class="callout-label">The point of a prototype</div>
+      <div class="callout-text">A prototype is not a smaller version of a production system. It is a demonstration that the architectural pattern is sound. The work that turns this into production is real, but it is incremental work on a foundation that already makes the right choices about autonomy, governance, and where LLMs do and do not earn their place.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-mark">Dec Page Intelligence Agent · Architecture Reference</div>
+    <div class="footer-meta">HO-3 focus · Five-stage Prompt Chaining workflow · Working prototype</div>
+  </div>
+</footer>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#FBF8F2',
+      primaryTextColor: '#131722',
+      primaryBorderColor: '#B5651D',
+      lineColor: '#3C434F',
+      secondaryColor: '#F7F3EA',
+      tertiaryColor: '#FBF8F2',
+      background: '#FBF8F2',
+      mainBkg: '#FBF8F2',
+      secondBkg: '#F7F3EA',
+      textColor: '#131722',
+      fontFamily: 'Manrope, sans-serif',
+      fontSize: '14px'
+    },
+    flowchart: {
+      curve: 'basis',
+      padding: 18,
+      nodeSpacing: 40,
+      rankSpacing: 60
+    },
+    sequence: {
+      actorMargin: 60,
+      width: 140,
+      height: 50,
+      boxMargin: 10,
+      boxTextMargin: 5,
+      noteMargin: 10,
+      messageMargin: 35,
+      mirrorActors: false
+    }
+  });
+</script>
+
+</body>
+</html>
